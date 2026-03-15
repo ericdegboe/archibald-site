@@ -3,210 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archibald</title>
+    <title>Archie — Your AI Dev Environment</title>
+    <meta name="description" content="A self-hosted AI developer environment with isolated worktrees, live previews, and composable skills. Open source. Runs on your machine.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --font: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --mono: 'JetBrains Mono', 'SF Mono', monospace;
+            --max-w: 1200px;
+            --ease: cubic-bezier(.4,0,.2,1);
+
+            --bg: #000000;
+            --bg-card: rgba(255,255,255,.04);
+            --bg-card-hover: rgba(255,255,255,.07);
+            --border: rgba(255,255,255,.08);
+            --border-hover: rgba(255,255,255,.14);
+
+            --text: #ffffff;
+            --text-2: rgba(255,255,255,.7);
+            --text-3: rgba(255,255,255,.4);
+
+            --accent: #b8d950;
+            --accent-light: #cff779;
+            --accent-glow: rgba(207,247,121,.2);
         }
 
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0d1117;
-            color: #e6edf3;
+            font-family: var(--font);
+            font-weight: 500;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent); color: #000; }
+
+        /* ───── NAV ───── */
+        .nav-wrap {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(0,0,0,.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
         }
 
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 0 2.5rem; height: 64px;
         }
 
-        nav .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #58a6ff;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: #8b949e;
+        .logo {
+            display: flex; align-items: center;
             text-decoration: none;
-            transition: color 0.2s;
         }
 
-        nav a:hover {
-            color: #e6edf3;
+        .logo-img { height: 36px; width: auto; display: block; }
+
+        .nav-links {
+            display: flex; align-items: center; gap: 2.25rem; list-style: none;
         }
 
-        .hero {
-            text-align: center;
-            padding: 8rem 2rem 6rem;
-            max-width: 800px;
-            margin: 0 auto;
+        .nav-links a {
+            font-size: .875rem; font-weight: 500; color: var(--text-2);
+            text-decoration: none; transition: color .2s var(--ease);
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
+        .nav-links a:hover { color: var(--text); }
+
+        .nav-cta {
+            padding: .5rem 1.3rem;
+            background: var(--accent);
+            color: #000 !important;
+            border-radius: 8px;
+            font-weight: 600; font-size: .875rem;
+            transition: background .2s var(--ease);
+        }
+
+        .nav-cta:hover { background: var(--accent-light); }
+
+        .mobile-toggle {
+            display: none; background: none; border: none; cursor: pointer;
+            flex-direction: column; gap: 5px; padding: 6px;
+        }
+
+        .mobile-toggle span {
+            display: block; width: 20px; height: 1.5px;
+            background: var(--text); border-radius: 2px;
+        }
+
+        /* ───── COMMON ───── */
+        section { padding: 7rem 2.5rem; }
+        .container { max-width: var(--max-w); margin: 0 auto; }
+
+        .divider-top {
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .35rem .9rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: .75rem; font-weight: 600;
+            color: var(--accent-light);
+            text-transform: uppercase; letter-spacing: .08em;
             margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #58a6ff, #bc8cff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: #8b949e;
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .badge-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent);
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+        h2.sec-title {
+            font-size: 3rem; font-weight: 800; letter-spacing: -.04em;
+            line-height: 1.1; margin-bottom: 1.25rem;
+        }
+
+        .sec-sub {
+            font-size: 1rem; color: var(--text-2);
+            max-width: 580px; line-height: 1.7;
         }
 
         .btn {
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex; align-items: center; gap: .45rem;
+            padding: .75rem 1.6rem; border-radius: 8px;
+            font-size: .875rem; font-weight: 600; text-decoration: none;
+            transition: transform .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
+            cursor: pointer; border: none;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-        }
+        .btn:hover { transform: translateY(-1px); }
 
         .btn-primary {
-            background: linear-gradient(135deg, #58a6ff, #bc8cff);
-            color: #0d1117;
+            background: var(--accent); color: #000;
+            box-shadow: 0 0 24px var(--accent-glow);
         }
 
-        .btn-secondary {
-            border: 1px solid #30363d;
-            color: #e6edf3;
-            background: transparent;
+        .btn-primary:hover {
+            background: var(--accent-light);
+            box-shadow: 0 0 36px var(--accent-glow);
         }
 
-        .btn-secondary:hover {
-            border-color: #58a6ff;
+        .btn-ghost {
+            background: transparent; color: var(--text);
+            border: 1px solid var(--border);
         }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
+        .btn-ghost:hover { border-color: var(--border-hover); background: var(--bg-card); }
 
-        .feature-card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 2rem;
-            transition: border-color 0.2s;
-        }
-
-        .feature-card:hover {
-            border-color: #58a6ff;
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-card p {
-            color: #8b949e;
-            font-size: 0.95rem;
-        }
-
-        footer {
+        /* ───── 1. HERO ───── */
+        .hero {
+            padding-top: 10rem; padding-bottom: 6rem;
             text-align: center;
-            padding: 3rem 2rem;
-            color: #484f58;
-            border-top: 1px solid #21262d;
-            margin-top: 4rem;
+            position: relative; overflow: hidden;
         }
 
-        @media (max-width: 600px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
+        .hero::before {
+            content: '';
+            position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
-            .hero p {
-                font-size: 1.1rem;
-            }
+        .hero .container { position: relative; max-width: 860px; }
 
-            nav ul {
+        .hero h1 {
+            font-size: 4.5rem; font-weight: 900; letter-spacing: -.05em;
+            line-height: 1.05; margin-bottom: 1.5rem;
+        }
+
+        .hero h1 .accent { color: var(--accent-light); }
+
+        .hero p {
+            font-size: 1.125rem; color: var(--text-2);
+            max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.7;
+        }
+
+        .hero-btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+        /* ───── 2. CORE LOOP ───── */
+        .core-section {
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .core-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 5rem; align-items: center;
+        }
+
+        .core-visual {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            overflow: hidden;
+        }
+
+        .core-visual::before {
+            content: '';
+            position: absolute; top: -50%; right: -30%;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .loop-step {
+            display: flex; align-items: center; gap: 1rem;
+            padding: .85rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .loop-step:last-child { border-bottom: none; }
+
+        .loop-num {
+            font-family: var(--mono); font-size: .75rem; font-weight: 600;
+            color: var(--accent-light);
+            width: 28px; height: 28px;
+            border: 1px solid rgba(207,247,121,.3);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .loop-label {
+            font-size: .875rem; font-weight: 600; color: var(--text);
+        }
+
+        .loop-desc {
+            font-size: .75rem; color: var(--text-3); margin-top: 2px;
+        }
+
+        .core-text .sec-sub { margin-bottom: 2rem; }
+
+        .core-features {
+            display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;
+        }
+
+        .core-feature {
+            display: flex; gap: .75rem; align-items: flex-start;
+        }
+
+        .core-feature-icon {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent); margin-top: 7px; flex-shrink: 0;
+        }
+
+        .core-feature p {
+            font-size: .875rem; color: var(--text-2); line-height: 1.55;
+        }
+
+        .core-feature strong { color: var(--text); font-weight: 600; }
+
+        /* ───── 3. TOOLS ───── */
+        .tools-section {
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .tools-header { text-align: center; margin-bottom: 5rem; }
+        .tools-header .sec-sub { margin: 0 auto; }
+
+        .tools-list {
+            display: flex; flex-direction: column;
+            gap: 0;
+        }
+
+        .tool-row {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center;
+            padding: 4.5rem 0;
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .tool-row:last-child { border-bottom: none; }
+
+        .tool-row.reversed .tool-text { order: 2; }
+        .tool-row.reversed .tool-media { order: 1; }
+
+        .tool-problem {
+            font-size: .75rem; font-weight: 600;
+            color: var(--accent-light);
+            text-transform: uppercase; letter-spacing: .06em;
+            margin-bottom: .75rem;
+        }
+
+        .tool-text h3 {
+            font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em;
+            margin-bottom: .75rem; line-height: 1.2;
+        }
+
+        .tool-text p {
+            font-size: 1rem; color: var(--text-2); line-height: 1.65;
+        }
+
+        .tool-media {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            aspect-ratio: 16 / 10;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            color: var(--text-3); font-size: .75rem;
+        }
+
+        .tool-media img {
+            width: 100%; height: 100%;
+            object-fit: cover; border-radius: 12px;
+        }
+
+        /* Build your own — two-column with code */
+        .tool-row.build-own {
+            padding: 5rem 0;
+        }
+
+        .tool-row.build-own .tool-problem { color: var(--accent-light); }
+
+        .build-points {
+            display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem;
+        }
+
+        .build-point {
+            display: flex; gap: .75rem; align-items: flex-start;
+        }
+
+        .build-point-icon {
+            width: 32px; height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; color: var(--accent-light);
+        }
+
+        .build-point-icon svg { width: 14px; height: 14px; }
+
+        .build-point h4 {
+            font-size: 1.125rem; font-weight: 700; margin-bottom: .15rem;
+        }
+
+        .build-point p {
+            font-size: 1rem; color: var(--text-2); line-height: 1.6;
+        }
+
+        /* ───── 4. SPEC ───── */
+        .spec-section {
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .spec-header { margin-bottom: 4rem; text-align: center; }
+        .spec-header .sec-sub { max-width: 680px; }
+
+        .spec-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 5rem; align-items: start;
+        }
+
+        .spec-text .sec-sub { margin-bottom: 2rem; }
+
+        .spec-flow {
+            display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;
+        }
+
+        .spec-flow-step {
+            display: flex; gap: 1rem; align-items: flex-start;
+        }
+
+        .spec-flow-num {
+            font-family: var(--mono); font-size: .625rem; font-weight: 600;
+            color: var(--accent-light);
+            width: 24px; height: 24px;
+            border: 1px solid rgba(207,247,121,.3);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 2px;
+        }
+
+        .spec-flow-step p {
+            font-size: .875rem; color: var(--text-2); line-height: 1.55;
+        }
+
+        .spec-blocks-col {
+            display: flex; flex-direction: column; gap: .75rem;
+        }
+
+        .spec-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color .25s var(--ease), background .25s var(--ease);
+        }
+
+        .spec-block:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .spec-label {
+            font-family: var(--mono); font-size: .625rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .08em;
+            padding: .2rem .5rem; border-radius: 4px;
+            display: inline-block; margin-bottom: .5rem;
+        }
+
+        .spec-label.behaviour  { background: rgba(96,165,250,.15); color: #60a5fa; }
+        .spec-label.decision   { background: rgba(207,247,121,.15); color: #cff779; }
+        .spec-label.context    { background: rgba(52,211,153,.15);  color: #34d399; }
+
+        .spec-block-text {
+            font-size: .75rem; color: var(--text-2); line-height: 1.55;
+        }
+
+        /* ───── 5. INSTALL ───── */
+        .install-section {
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .install-header { text-align: center; margin-bottom: 4rem; }
+        .install-header .sec-sub { margin: 0 auto; }
+
+        .install-modes {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1.5rem; margin-bottom: 4rem;
+        }
+
+        .install-mode {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: border-color .25s var(--ease), background .25s var(--ease);
+        }
+
+        .install-mode:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .install-mode-icon {
+            width: 48px; height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem; color: var(--accent-light);
+        }
+
+        .install-mode-icon svg { width: 22px; height: 22px; }
+
+        .install-mode-label {
+            font-size: .75rem; font-weight: 600;
+            color: var(--accent-light);
+            text-transform: uppercase; letter-spacing: .06em;
+            margin-bottom: .5rem;
+        }
+
+        .install-mode h3 {
+            font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em;
+            margin-bottom: .6rem; line-height: 1.2;
+        }
+
+        .install-mode p {
+            font-size: .875rem; color: var(--text-2); line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .install-mode-highlight {
+            font-size: .75rem; color: var(--text-3); line-height: 1.55;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .code-window {
+            background: #0d0d0d;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .code-bar {
+            display: flex; align-items: center; gap: .4rem;
+            padding: .75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-r { background: #ff5f57; }
+        .dot-y { background: #febc2e; }
+        .dot-g { background: #28c840; }
+
+        .code-body {
+            padding: 1.5rem;
+            font-family: var(--mono); font-size: .75rem;
+            line-height: 1.9; color: var(--text-3);
+            overflow-x: auto;
+        }
+
+        .code-body .c { color: rgba(255,255,255,.2); }
+        .code-body .cmd { color: #7ec699; }
+        .code-body .str { color: var(--accent-light); }
+        .code-body .flag { color: #60a5fa; }
+
+
+        /* ───── FOOTER ───── */
+        footer {
+            padding: 5rem 2.5rem 3rem;
+            border-top: 1px solid var(--border);
+            border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+        }
+
+        .footer-logo {
+            display: block; margin: 0 auto; width: 100%; max-width: var(--max-w);
+        }
+
+        .footer-logo img { width: 100%; height: auto; display: block; }
+
+        /* ───── ANIMATIONS ───── */
+        .fade-in {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ───── RESPONSIVE ───── */
+        @media (max-width: 1024px) {
+            h2.sec-title { font-size: 2rem; }
+            .hero h1 { font-size: 3rem; }
+            .core-grid, .spec-grid, .install-modes { grid-template-columns: 1fr; gap: 3rem; }
+            .tool-row { grid-template-columns: 1fr; gap: 2.5rem; }
+            .tool-row.reversed .tool-text { order: 1; }
+            .tool-row.reversed .tool-media { order: 2; }
+        }
+
+        @media (max-width: 640px) {
+            section { padding: 4.5rem 1.25rem; }
+            nav { padding: 0 1.25rem; }
+            .hero { padding-top: 8rem; padding-bottom: 4.5rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+            h2.sec-title { font-size: 1.75rem; }
+            .tool-row { padding: 3rem 0; }
+            .nav-links { display: none; }
+            .mobile-toggle { display: flex; }
+            .nav-links.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 64px; left: 0; right: 0;
+                background: rgba(0,0,0,.95);
+                backdrop-filter: blur(20px);
+                padding: 1.5rem 2rem;
+                border-bottom: 1px solid var(--border);
                 gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<div class="nav-wrap">
     <nav>
-        <div class="logo">Archibald</div>
-        <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="https://github.com/yourusername/Archibald">GitHub</a></li>
+        <a href="#" class="logo"><img src="logo_archie.svg" alt="Archie" class="logo-img"></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#core">How it works</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#spec">Living Spec</a></li>
+            <li><a href="#install">Install</a></li>
+            <li><a href="#install" class="nav-cta">Get Started</a></li>
         </ul>
+        <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+</div>
 
-    <section class="hero">
-        <h1>Meet Archibald</h1>
-        <p>A powerful, elegant solution built to simplify your workflow and help you ship faster.</p>
-        <div class="cta-buttons">
-            <a href="#features" class="btn btn-primary">Get Started</a>
-            <a href="https://github.com/yourusername/Archibald" class="btn btn-secondary">View on GitHub</a>
+<!-- ══════════════════════ 1. HERO ══════════════════════ -->
+<section class="hero">
+    <div class="container fade-in">
+        <h1>A dev environment that <span class="accent">adapts to you.</span></h1>
+        <p>Archie gives you the tools to collaborate with AI coding agents and ship quality applications faster. Built by you, for you and your team's unique workflow.</p>
+        <div class="hero-btns">
+            <a href="#install" class="btn btn-primary">Get Started</a>
+            <a href="#core" class="btn btn-ghost">See how it works</a>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="features" class="features">
-        <div class="feature-card">
-            <div class="feature-icon">&#9889;</div>
-            <h3>Lightning Fast</h3>
-            <p>Optimized for speed so you can focus on what matters most — building great things.</p>
+<!-- ══════════════════════ 2. TOOLS ══════════════════════ -->
+<section class="tools-section" id="tools">
+    <div class="container">
+        <div class="tools-header fade-in">
+            <h2 class="sec-title">Everything you need to develop better.<br>And the freedom to add more.</h2>
+            <p class="sec-sub">Archie ships with tools that handle isolation, previewing, walkthroughs, and demos. Each one plugs into the core, and you can build your own.</p>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#128274;</div>
-            <h3>Secure by Default</h3>
-            <p>Built with security best practices baked in from the ground up.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">&#128640;</div>
-            <h3>Easy to Deploy</h3>
-            <p>Get up and running in minutes with simple setup and clear documentation.</p>
-        </div>
-    </section>
+        <div class="tools-list">
 
-    <footer>
-        <p>&copy; 2026 Archibald. All rights reserved.</p>
-    </footer>
+            <!-- Walkthrough -->
+            <div class="tool-row fade-in">
+                <div class="tool-text">
+                    <div class="tool-problem">you can't see what the agent built</div>
+                    <h3>Live walkthrough</h3>
+                    <p>Coding agents produce code, but you still have to manually click through the app to understand what changed. Archie's walkthrough lets you step through user flows with AI narration explaining each screen, so you review behavior, not just diffs.</p>
+                </div>
+                <div class="tool-media">
+                    <span>Screenshot placeholder</span>
+                </div>
+            </div>
+
+            <!-- Demo -->
+            <div class="tool-row reversed fade-in">
+                <div class="tool-text">
+                    <div class="tool-problem">demoing takes longer than building</div>
+                    <h3>Video demo generation</h3>
+                    <p>You shipped a feature in minutes, then spent an hour recording a walkthrough for stakeholders. Archie records narrated demos automatically. The agent navigates, performs actions, and produces a shareable video without you ever opening a screen recorder.</p>
+                </div>
+                <div class="tool-media">
+                    <span>Screenshot placeholder</span>
+                </div>
+            </div>
+
+            <!-- Live preview -->
+            <div class="tool-row fade-in">
+                <div class="tool-text">
+                    <div class="tool-problem">reviewing code isn't reviewing the product</div>
+                    <h3>Live preview</h3>
+                    <p>Reading a diff doesn't tell you if the feature actually works. Each task in Archie runs its own live preview instance with a duplicated database. You visit the URL, interact with the app, and test the agent's changes before anything touches main.</p>
+                </div>
+                <div class="tool-media">
+                    <span>Screenshot placeholder</span>
+                </div>
+            </div>
+
+            <!-- Worktree isolation -->
+            <div class="tool-row reversed fade-in">
+                <div class="tool-text">
+                    <div class="tool-problem">agents work on your live codebase</div>
+                    <h3>Worktree isolation</h3>
+                    <p>Most AI coding setups let the agent operate directly on your main branch and production database. One bad run and you're cleaning up the mess. Archie gives every task its own git worktree and duplicated database. The worst a failed run can do is produce a branch you discard.</p>
+                </div>
+                <div class="tool-media">
+                    <span>Screenshot placeholder</span>
+                </div>
+            </div>
+
+            <!-- Build your own -->
+            <div class="tool-row build-own fade-in">
+                <div class="tool-text">
+                    <div class="tool-problem">But wait, we said it adapts to you&hellip;</div>
+                    <h3>The last dev tool you'll ever need</h3>
+                    <p>Stop switching tools every time something new hits Hacker News. Archie is yours to shape. Need a feature? Don't wait for a roadmap, just build it. Two ways to make it exactly what you need:</p>
+                    <div class="build-points">
+                        <div class="build-point">
+                            <div class="build-point-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <div>
+                                <h4>Add skills</h4>
+                                <p>Changelog generation, Slack notifications, Jira sync, deploy hooks. Drop in a skill and it plugs into the core. The architecture stays clean as you grow.</p>
+                            </div>
+                        </div>
+                        <div class="build-point">
+                            <div class="build-point-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            </div>
+                            <div>
+                                <h4>Edit the entire app</h4>
+                                <p>It's a Next.js codebase you own. Ask Claude to rewrite the dashboard, change the review flow, or rip out what you don't need. Nothing is off-limits.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-window">
+                    <div class="code-bar">
+                        <span class="code-dot dot-r"></span>
+                        <span class="code-dot dot-y"></span>
+                        <span class="code-dot dot-g"></span>
+                    </div>
+                    <div class="code-body">
+                        <div><span class="c"># Add a skill in one prompt</span></div>
+                        <div><span class="cmd">claude</span> <span class="str">"add a changelog skill that</span></div>
+                        <div><span class="str"> summarizes completed tasks by sprint"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="c"># Or change anything about the app</span></div>
+                        <div><span class="cmd">claude</span> <span class="str">"add a Slack notification</span></div>
+                        <div><span class="str"> when a task preview is ready for review"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="c"># Your tool. Your rules.</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════ 3. SPEC ══════════════════════ -->
+<section class="spec-section" id="spec">
+    <div class="container">
+        <div class="spec-header fade-in">
+            <h2 class="sec-title">The spec drives the code.<br>The code updates the spec.</h2>
+        </div>
+        <div class="spec-grid fade-in">
+            <div class="spec-text">
+                <p class="sec-sub" style="margin-bottom:2rem;">Every project has a living specification. Edit the spec, and Archie generates a focused task from the diff. The agent builds it in an isolated worktree. After you review, the spec updates to reflect what was actually built.</p>
+                <div class="spec-flow">
+                    <div class="spec-flow-step">
+                        <div class="spec-flow-num">1</div>
+                        <p>Edit the spec and describe what the application should do.</p>
+                    </div>
+                    <div class="spec-flow-step">
+                        <div class="spec-flow-num">2</div>
+                        <p>Archie generates a plain-language task summary from the diff.</p>
+                    </div>
+                    <div class="spec-flow-step">
+                        <div class="spec-flow-num">3</div>
+                        <p>You confirm, and the agent builds it in an isolated worktree.</p>
+                    </div>
+                    <div class="spec-flow-step">
+                        <div class="spec-flow-num">4</div>
+                        <p>Review the live preview, mark it complete, and the spec updates.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="spec-blocks-col">
+                <div class="spec-block">
+                    <span class="spec-label behaviour">Behaviour</span>
+                    <p class="spec-block-text">Precise, unambiguous descriptions of how the system acts. Inputs, outputs, state changes. Clear enough to hand directly to QA.</p>
+                </div>
+                <div class="spec-block">
+                    <span class="spec-label decision">Decision</span>
+                    <p class="spec-block-text">Deliberate architectural choices with rejected alternatives. Tells the agent: this was chosen consciously, build it.</p>
+                </div>
+                <div class="spec-block">
+                    <span class="spec-label context">Context</span>
+                    <p class="spec-block-text">The reasoning behind a requirement. The agent uses it to interpret ambiguity, not as a direct instruction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════ 4. INSTALL ══════════════════════ -->
+<section class="install-section" id="install">
+    <div class="container">
+        <div class="install-header fade-in">
+            <h2 class="sec-title">Clone it. Run it. Make it yours.</h2>
+            <p class="sec-sub">Archie is a foundation, not a prescription. Run it locally or deploy it for your whole team, including the people who never touch a terminal.</p>
+        </div>
+
+        <!-- Two modes -->
+        <div class="install-modes fade-in">
+            <div class="install-mode">
+                <div class="install-mode-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div class="install-mode-label">For solo developers</div>
+                <h3>Run it on your machine</h3>
+                <p>Clone the repo, install, and start developing. Archie runs entirely on your local machine. Your code, your data, your environment. No cloud dependency.</p>
+                <div class="code-window" style="margin-bottom:0;">
+                    <div class="code-bar">
+                        <span class="code-dot dot-r"></span>
+                        <span class="code-dot dot-y"></span>
+                        <span class="code-dot dot-g"></span>
+                    </div>
+                    <div class="code-body">
+                        <div><span class="cmd">git clone</span> <span class="str">https://github.com/your-org/archie</span></div>
+                        <div><span class="cmd">cd</span> archie <span class="flag">&&</span> <span class="cmd">npm install</span></div>
+                        <div><span class="cmd">npm run dev</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="install-mode">
+                <div class="install-mode-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <div class="install-mode-label">For teams</div>
+                <h3>Lovable or Base44 like for your codebase</h3>
+                <p>Deploy Archie on DigitalOcean, AWS, or any server. Your entire team gets access through the browser: designers, PMs, marketing, anyone. No local setup, nothing to install, nothing to break.</p>
+                <p>Think of it as your own Lovable or Base44, but running against your actual codebase. Anyone on the team can describe a change, review a live preview, and share a demo or a PR, without writing a line of code or installing anything on their machine.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer>
+    <div class="footer-logo">
+        <img src="logo_archie_footer.svg" alt="Archie">
+    </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+
 </body>
 </html>

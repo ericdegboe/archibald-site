@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archie — Your AI Dev Environment</title>
-    <meta name="description" content="A self-hosted AI developer environment with isolated worktrees, live previews, and composable skills. Open source. Runs on your machine.">
+    <title>Archie — The AI Dev Environment You Control</title>
+    <meta name="description" content="A self-hosted AI dev environment for your codebase. Run Claude Code or Codex in isolated worktrees with live previews, living project memory, and tools your team can build and share.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -638,7 +638,7 @@
         <a href="#" class="logo"><img src="logo_archie.svg" alt="Archie" class="logo-img"></a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#tools">Tools</a></li>
-            <li><a href="#spec">Living Spec</a></li>
+            <li><a href="#spec">Project Memory</a></li>
             <li><a href="#install">Install</a></li>
             <li><a href="#install" class="nav-cta">Get Started</a></li>
         </ul>
@@ -651,12 +651,13 @@
 <!-- ══════════════════════ 1. HERO ══════════════════════ -->
 <section class="hero">
     <div class="container fade-in">
-        <h1>A dev environment that <span class="accent">adapts to you.</span></h1>
-        <p>Stop switching tools every time something new drops. Archie is yours to shape, a dev environment built by you, for you and your team's unique workflow.</p>
+        <h1>Your codebase needs more than <span class="accent">a chat box.</span></h1>
+        <p>Archie is a self-hosted AI dev environment for real software teams. Run coding agents in isolated worktrees, review live previews, keep project memory in the repo, and add the tools your workflow actually needs.</p>
         <div class="hero-btns">
             <a href="#install" class="btn btn-primary">Get Started</a>
-            <a href="#core" class="btn btn-ghost">See how it works</a>
+            <a href="#tools" class="btn btn-ghost">See the workflow</a>
         </div>
+        <p style="margin-top:1.25rem;font-size:.875rem;color:var(--text-3);">Self-hosted &bull; Works with Claude Code and Codex &bull; Local or team-hosted</p>
     </div>
 </section>
 
@@ -664,17 +665,17 @@
 <section class="tools-section" id="tools">
     <div class="container">
         <div class="tools-header fade-in">
-            <h2 class="sec-title">Not another model wrapper.<br>A dev layer you can shape.</h2>
-            <p class="sec-sub">AI coding tools give you a general agent. Archie gives you a software operating layer on top of those agents, built around your codebase, your team, and your workflow. It ships with real tools. And you can add your own.</p>
+            <h2 class="sec-title">Not another model wrapper.<br>A dev layer for your codebase.</h2>
+            <p class="sec-sub">Claude Code and Codex give you powerful general-purpose agents. Archie gives you the layer they do not: isolated execution, reviewable previews, repo-local memory, and team-defined tools built around how your software actually gets built.</p>
         </div>
         <div class="tools-list">
 
             <!-- Walkthrough -->
             <div class="tool-row fade-in">
                 <div class="tool-text">
-                    <div class="tool-problem">you can't see what the agent built</div>
+                    <div class="tool-problem">you still have to figure out what changed</div>
                     <h3>Live walkthrough</h3>
-                    <p>Coding agents produce code, but you still have to manually click through the app to understand what changed. Archie's walkthrough lets you step through user flows with AI narration explaining each screen, so you review behavior, not just diffs.</p>
+                    <p>Don't make people reverse-engineer a feature from a diff. Archie can walk through the app step by step with narration, so you review user-visible behavior instead of guessing what the agent built.</p>
                 </div>
                 <div class="tool-media">
                     <span>Screenshot placeholder</span>
@@ -684,9 +685,9 @@
             <!-- Demo -->
             <div class="tool-row reversed fade-in">
                 <div class="tool-text">
-                    <div class="tool-problem">demoing takes longer than building</div>
+                    <div class="tool-problem">shipping is faster than demoing</div>
                     <h3>Video demo generation</h3>
-                    <p>You shipped a feature in minutes, then spent an hour recording a walkthrough for stakeholders. Archie records narrated demos automatically. The agent navigates, performs actions, and produces a shareable video without you ever opening a screen recorder.</p>
+                    <p>A feature might take minutes to build and an hour to explain. Archie records narrated demos automatically by navigating the app, using the right data, and producing a shareable video for stakeholders.</p>
                 </div>
                 <div class="tool-media">
                     <span>Screenshot placeholder</span>
@@ -696,9 +697,9 @@
             <!-- Live preview -->
             <div class="tool-row fade-in">
                 <div class="tool-text">
-                    <div class="tool-problem">reviewing code isn't reviewing the product</div>
-                    <h3>Live preview</h3>
-                    <p>Reading a diff doesn't tell you if the feature actually works. Each task in Archie runs its own live preview instance with a duplicated database. You visit the URL, interact with the app, and test the agent's changes before anything touches main.</p>
+                    <div class="tool-problem">review the product, not just the patch</div>
+                    <h3>Live preview per task</h3>
+                    <p>Every task gets its own preview environment, so you can click through the actual result before anything lands on main. Test behavior, verify flows, and catch issues early.</p>
                 </div>
                 <div class="tool-media">
                     <span>Screenshot placeholder</span>
@@ -708,9 +709,9 @@
             <!-- Worktree isolation -->
             <div class="tool-row reversed fade-in">
                 <div class="tool-text">
-                    <div class="tool-problem">agents work on your live codebase</div>
+                    <div class="tool-problem">agent runs should not touch your main branch</div>
                     <h3>Worktree isolation</h3>
-                    <p>Most AI coding setups let the agent operate directly on your main branch and production database. One bad run and you're cleaning up the mess. Archie gives every task its own git worktree and duplicated database. The worst a failed run can do is produce a branch you discard.</p>
+                    <p>Each task runs in its own git worktree with its own preview and runtime context. If a run goes sideways, you throw away the branch instead of cleaning up your main codebase.</p>
                 </div>
                 <div class="tool-media">
                     <span>Screenshot placeholder</span>
@@ -720,17 +721,26 @@
             <!-- Build your own -->
             <div class="tool-row build-own fade-in">
                 <div class="tool-text">
-                    <div class="tool-problem">But wait, we said it adapts to you&hellip;</div>
-                    <h3>Build your own tools</h3>
-                    <p>If you can describe it, you can build it. Create any tool you need, register it, and it runs like a native feature. Share it with your team or publish it to the registry for the community. The only limit is your imagination.</p>
+                    <div class="tool-problem">your workflow is not generic</div>
+                    <h3>Add the tools your team actually needs</h3>
+                    <p>Archie ships with real workflows out of the box, but the bigger idea is extensibility. Add PR reviews, test generation, code quality checks, compliance checks, analytics validation, onboarding helpers, or anything else your team repeats.</p>
                     <div class="build-points">
                         <div class="build-point">
                             <div class="build-point-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                             </div>
                             <div>
-                                <h4>Add tools</h4>
-                                <p>PR reviews, test generation, compliance checks, deploy hooks. Build a tool in one prompt, plug it into the core, and share it with anyone.</p>
+                                <h4>Shared context by default</h4>
+                                <p>New tools inherit project memory, specs, diffs, personas, and run history instead of rediscovering the repo from scratch.</p>
+                            </div>
+                        </div>
+                        <div class="build-point">
+                            <div class="build-point-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div>
+                                <h4>Platform reliability built in</h4>
+                                <p>Retries, logs, artifacts, previews, and run tracking come from Archie, so every new tool benefits from the same foundation.</p>
                             </div>
                         </div>
                         <div class="build-point">
@@ -738,8 +748,8 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                             </div>
                             <div>
-                                <h4>Edit the entire app</h4>
-                                <p>It's a codebase you own. Rewrite the dashboard, change the review flow, rip out what you don't need. Nothing is locked down, nothing is off-limits.</p>
+                                <h4>Yours to change</h4>
+                                <p>It's your codebase and your environment. Change the workflows, change the UI, remove what you don't need, and shape it around your team.</p>
                             </div>
                         </div>
                     </div>
@@ -775,29 +785,30 @@
 <section class="spec-section" id="spec">
     <div class="container">
         <div class="spec-header fade-in">
-            <h2 class="sec-title">The spec drives the code.<br>The code updates the spec.</h2>
+            <h2 class="sec-title">Living project memory,<br>kept close to the code.</h2>
+            <p class="sec-sub" style="margin-bottom:2rem;">Archie keeps a repo-local spec your team can shape. That spec becomes reusable project memory for coding tasks, walkthroughs, demos, and custom tools.</p>
         </div>
         <div class="spec-grid fade-in">
             <div class="spec-text">
-                <p class="sec-sub" style="margin-bottom:2rem;">Every project has a living specification. Edit the spec, and Archie generates a focused task from the diff. The agent builds it in an isolated worktree. After you review, the spec updates to reflect what was actually built.</p>
                 <div class="spec-flow">
                     <div class="spec-flow-step">
                         <div class="spec-flow-num">1</div>
-                        <p>Edit the spec and describe what the application should do.</p>
+                        <p>Define how your team wants specs to be written.</p>
                     </div>
                     <div class="spec-flow-step">
                         <div class="spec-flow-num">2</div>
-                        <p>Archie generates a plain-language task summary from the diff.</p>
+                        <p>Generate or refine repo-local docs from the codebase.</p>
                     </div>
                     <div class="spec-flow-step">
                         <div class="spec-flow-num">3</div>
-                        <p>You confirm, and the agent builds it in an isolated worktree.</p>
+                        <p>Turn spec changes into focused work items.</p>
                     </div>
                     <div class="spec-flow-step">
                         <div class="spec-flow-num">4</div>
-                        <p>Review the live preview, mark it complete, and the spec updates.</p>
+                        <p>Keep the spec aligned with what was actually built.</p>
                     </div>
                 </div>
+                <p class="sec-sub" style="margin-top:2rem;">The goal is not more documentation. The goal is better shared context.</p>
             </div>
             <div class="tool-media">
                 <span>Screenshot placeholder</span>
@@ -810,8 +821,8 @@
 <section class="install-section" id="install">
     <div class="container">
         <div class="install-header fade-in">
-            <h2 class="sec-title">Clone it. Run it. Make it yours.</h2>
-            <p class="sec-sub">Archie is a foundation, not a prescription. Run it locally or deploy it for your whole team, including the people who never touch a terminal.</p>
+            <h2 class="sec-title">Run it locally. Host it for your team.</h2>
+            <p class="sec-sub">Archie works as a local developer environment and as a shared browser-based workspace for the rest of your team.</p>
         </div>
 
         <!-- Two modes -->
@@ -820,9 +831,9 @@
                 <div class="install-mode-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                 </div>
-                <div class="install-mode-label">For solo developers</div>
+                <div class="install-mode-label">For developers</div>
                 <h3>Run it on your machine</h3>
-                <p>Clone the repo, install, and start developing. Archie runs entirely on your local machine. Your code, your data, your environment. No cloud dependency.</p>
+                <p>Clone the repo, start Archie locally, and point it at your projects. Use your local tools, your local auth, and your own codebase without giving up control.</p>
                 <div class="code-window" style="margin-bottom:0;">
                     <div class="code-bar">
                         <span class="code-dot dot-r"></span>
@@ -841,9 +852,9 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
                 <div class="install-mode-label">For teams</div>
-                <h3>Lovable or Base44 like for your codebase</h3>
-                <p>Deploy Archie on DigitalOcean, AWS, or any server. Your entire team gets access through the browser: designers, PMs, marketing, anyone. No local setup, nothing to install, nothing to break.</p>
-                <p>Think of it as your own Lovable or Base44, but running against your actual codebase. Anyone on the team can describe a change, review a live preview, and share a demo or a PR, without writing a line of code or installing anything on their machine.</p>
+                <h3>Host it once, let the whole team use it</h3>
+                <p>Deploy Archie on your own infrastructure and give developers, designers, PMs, and marketers a shared workspace for your codebase.</p>
+                <p>Review previews, inspect diffs, watch demos, and use team-built tools from the browser without asking everyone to install local tooling.</p>
             </div>
         </div>
 

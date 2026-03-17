@@ -358,6 +358,63 @@
             font-size: 1rem; color: var(--text-2); line-height: 1.6;
         }
 
+        /* Animated skills ticker */
+        .skills-ticker {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
+
+        .skills-ticker::before,
+        .skills-ticker::after {
+            content: '';
+            position: absolute; left: 0; right: 0; height: 3rem; z-index: 2; pointer-events: none;
+        }
+
+        .skills-ticker::before {
+            top: 0;
+            background: linear-gradient(to bottom, #000, transparent);
+        }
+
+        .skills-ticker::after {
+            bottom: 0;
+            background: linear-gradient(to top, #000, transparent);
+        }
+
+        .skills-ticker-track {
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+            animation: ticker-scroll 16s linear infinite;
+        }
+
+        .skills-ticker-item {
+            padding: .875rem 1.25rem;
+            font-size: .875rem;
+            font-weight: 600;
+            color: var(--text-2);
+            white-space: nowrap;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .skills-ticker-item::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        @keyframes ticker-scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(calc(-50% - .375rem)); }
+        }
+
         /* ───── 4. SPEC ───── */
         .spec-section {
             border-top: 1px solid var(--border);
@@ -521,9 +578,10 @@
 
         /* ───── FOOTER ───── */
         footer {
-            padding: 5rem 2.5rem 3rem;
+            padding: 0;
             border-top: 1px solid var(--border);
             border-image: linear-gradient(to right, transparent 10%, var(--border) 10%, var(--border) 90%, transparent 90%) 1;
+            overflow: hidden;
         }
 
         .footer-logo {
@@ -594,7 +652,7 @@
 <section class="hero">
     <div class="container fade-in">
         <h1>A dev environment that <span class="accent">adapts to you.</span></h1>
-        <p>Archie gives you the tools to collaborate with AI coding agents and ship quality applications faster. Built by you, for you and your team's unique workflow.</p>
+        <p>Stop switching tools every time something new drops. Archie is yours to shape, a dev environment built by you, for you and your team's unique workflow.</p>
         <div class="hero-btns">
             <a href="#install" class="btn btn-primary">Get Started</a>
             <a href="#core" class="btn btn-ghost">See how it works</a>
@@ -606,8 +664,8 @@
 <section class="tools-section" id="tools">
     <div class="container">
         <div class="tools-header fade-in">
-            <h2 class="sec-title">Everything you need to develop better.<br>And the freedom to add more.</h2>
-            <p class="sec-sub">Archie ships with tools that handle isolation, previewing, walkthroughs, and demos. Each one plugs into the core, and you can build your own.</p>
+            <h2 class="sec-title">Not another model wrapper.<br>A dev layer you can shape.</h2>
+            <p class="sec-sub">AI coding tools give you a general agent. Archie gives you a software operating layer on top of those agents, built around your codebase, your team, and your workflow. It ships with real tools. And you can add your own.</p>
         </div>
         <div class="tools-list">
 
@@ -663,16 +721,16 @@
             <div class="tool-row build-own fade-in">
                 <div class="tool-text">
                     <div class="tool-problem">But wait, we said it adapts to you&hellip;</div>
-                    <h3>The last dev tool you'll ever need</h3>
-                    <p>Stop switching tools every time something new hits Hacker News. Archie is yours to shape. Need a feature? Don't wait for a roadmap, just build it. Two ways to make it exactly what you need:</p>
+                    <h3>Build your own tools</h3>
+                    <p>If you can describe it, you can build it. Create any tool you need, register it, and it runs like a native feature. Share it with your team or publish it to the registry for the community. The only limit is your imagination.</p>
                     <div class="build-points">
                         <div class="build-point">
                             <div class="build-point-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                             </div>
                             <div>
-                                <h4>Add skills</h4>
-                                <p>Changelog generation, Slack notifications, Jira sync, deploy hooks. Drop in a skill and it plugs into the core. The architecture stays clean as you grow.</p>
+                                <h4>Add tools</h4>
+                                <p>PR reviews, test generation, compliance checks, deploy hooks. Build a tool in one prompt, plug it into the core, and share it with anyone.</p>
                             </div>
                         </div>
                         <div class="build-point">
@@ -681,27 +739,30 @@
                             </div>
                             <div>
                                 <h4>Edit the entire app</h4>
-                                <p>It's a Next.js codebase you own. Ask Claude to rewrite the dashboard, change the review flow, or rip out what you don't need. Nothing is off-limits.</p>
+                                <p>It's a codebase you own. Rewrite the dashboard, change the review flow, rip out what you don't need. Nothing is locked down, nothing is off-limits.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="code-window">
-                    <div class="code-bar">
-                        <span class="code-dot dot-r"></span>
-                        <span class="code-dot dot-y"></span>
-                        <span class="code-dot dot-g"></span>
-                    </div>
-                    <div class="code-body">
-                        <div><span class="c"># Add a skill in one prompt</span></div>
-                        <div><span class="cmd">claude</span> <span class="str">"add a changelog skill that</span></div>
-                        <div><span class="str"> summarizes completed tasks by sprint"</span></div>
-                        <div>&nbsp;</div>
-                        <div><span class="c"># Or change anything about the app</span></div>
-                        <div><span class="cmd">claude</span> <span class="str">"add a Slack notification</span></div>
-                        <div><span class="str"> when a task preview is ready for review"</span></div>
-                        <div>&nbsp;</div>
-                        <div><span class="c"># Your tool. Your rules.</span></div>
+                <div class="skills-ticker">
+                    <div class="skills-ticker-track">
+                        <div class="skills-ticker-item">PR review workflows</div>
+                        <div class="skills-ticker-item">Code quality enforcement</div>
+                        <div class="skills-ticker-item">Test generation</div>
+                        <div class="skills-ticker-item">Architecture conformity checks</div>
+                        <div class="skills-ticker-item">SOC 2 / compliance evidence</div>
+                        <div class="skills-ticker-item">Analytics validation</div>
+                        <div class="skills-ticker-item">Onboarding helpers</div>
+                        <div class="skills-ticker-item">Release readiness checks</div>
+                        <!-- Duplicate for seamless loop -->
+                        <div class="skills-ticker-item">PR review workflows</div>
+                        <div class="skills-ticker-item">Code quality enforcement</div>
+                        <div class="skills-ticker-item">Test generation</div>
+                        <div class="skills-ticker-item">Architecture conformity checks</div>
+                        <div class="skills-ticker-item">SOC 2 / compliance evidence</div>
+                        <div class="skills-ticker-item">Analytics validation</div>
+                        <div class="skills-ticker-item">Onboarding helpers</div>
+                        <div class="skills-ticker-item">Release readiness checks</div>
                     </div>
                 </div>
             </div>
@@ -738,19 +799,8 @@
                     </div>
                 </div>
             </div>
-            <div class="spec-blocks-col">
-                <div class="spec-block">
-                    <span class="spec-label behaviour">Behaviour</span>
-                    <p class="spec-block-text">Precise, unambiguous descriptions of how the system acts. Inputs, outputs, state changes. Clear enough to hand directly to QA.</p>
-                </div>
-                <div class="spec-block">
-                    <span class="spec-label decision">Decision</span>
-                    <p class="spec-block-text">Deliberate architectural choices with rejected alternatives. Tells the agent: this was chosen consciously, build it.</p>
-                </div>
-                <div class="spec-block">
-                    <span class="spec-label context">Context</span>
-                    <p class="spec-block-text">The reasoning behind a requirement. The agent uses it to interpret ambiguity, not as a direct instruction.</p>
-                </div>
+            <div class="tool-media">
+                <span>Screenshot placeholder</span>
             </div>
         </div>
     </div>
